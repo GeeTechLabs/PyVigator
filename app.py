@@ -313,40 +313,52 @@ def read_chapters(nav_type, chapter_number):
                 series_artist = '-'
         except:
             series_artist = '-'
-        resulting_json = '''{{
-            "title": {0},
-            "description": """{1}""",
-            "released": "{2}",
-            "author": "{3}",
-            "serialization": "{4}",
-            "posted_by": "{5}",
-            "posted_on": "{6}",
-            "updated_on": "{7}",
-            "artist": "{8}",
-            "type": "{9}",,
-            "ratings": {10},
-            "image_link": '{11}',
-            "followed_by": "{12}",
-            "genres": {13},
-            "status": "{14}",
-            "keywords": {15},
-            "first_chapter": {16},
-            "last_chapter": {17},
-            "chapters": [{18}],
-            "related_series": {19}, 
-            "is_popular_daily": {20},
-            "is_popular_weekly": {21},
-            "is_popular_monthly": {22},
-            "is_popular_all": {23},
-            "is_featured": {24},
-            "is_trending": {25}
-        }}'''.format(series_title, series_description, series_released, series_author, series_serialization, series_posted_by, series_posted_on, series_updated_on, series_artist, series_type, series_rating, series_cover_image, series_followed_by, series_genres, series_status, series_keywords, series_last_chapter, series_first_chapter, chapter_string, related_series, is_popular_daily, is_popular_weekly, is_popular_monthly, is_popular_all, is_featured, is_trending)
+
+        try:
+            resulting_json = '''{{
+                "title": {0},
+                "description": """{1}""",
+                "released": "{2}",
+                "author": "{3}",
+                "serialization": "{4}",
+                "posted_by": "{5}",
+                "posted_on": "{6}",
+                "updated_on": "{7}",
+                "artist": "{8}",
+                "type": "{9}",,
+                "ratings": {10},
+                "image_link": '{11}',
+                "followed_by": "{12}",
+                "genres": {13},
+                "status": "{14}",
+                "keywords": {15},
+                "first_chapter": {16},
+                "last_chapter": {17},
+                "chapters": [{18}],
+                "related_series": {19}, 
+                "is_popular_daily": {20},
+                "is_popular_weekly": {21},
+                "is_popular_monthly": {22},
+                "is_popular_all": {23},
+                "is_featured": {24},
+                "is_trending": {25}
+            }}'''.format(series_title, series_description, series_released, series_author, series_serialization, series_posted_by, series_posted_on, series_updated_on, series_artist, series_type, series_rating, series_cover_image, series_followed_by, series_genres, series_status, series_keywords, series_last_chapter, series_first_chapter, chapter_string, related_series, is_popular_daily, is_popular_weekly, is_popular_monthly, is_popular_all, is_featured, is_trending)
+        except Exception as e:
+            custom_log(e)
 
 
-        json_obj = json.loads(resulting_json)
+        try:
+            custom_log("Loading JSON String Into Loads")
+            json_obj = json.loads(resulting_json)
+        except Exception as e:
+            custom_log(e)
 
-        with open("new_series.json", "w") as write_file:
-            json.dump(json_obj, write_file, indent=4)
+        try:
+            custom_log('Attempting Write To File')
+            with open("new_series.json", "w") as write_file:
+                json.dump(json_obj, write_file, indent=4)
+        except Exception as e:
+            custom_log(e)
         custom_log(resulting_json)
 
         try:
