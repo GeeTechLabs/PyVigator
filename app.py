@@ -507,14 +507,23 @@ def check_comics():
             custom_log('Trying To Open Series')
 
         try:
+            connection = psycopg2.connect(user="postgres", password='Gee321!!', host="127.0.0.1", port="5432", database="test2manhua")
+            cursor = connection.cursor()
             select_statement = 'select title from comics;'
 
             cursor.execute(select_statement)
 
             database_data = cursor.fetchall()
 
-        except:
-            custom_log('Values From DB Not Checked')
+        except (Exception, psycopg2.Error) as error:
+            custom_log(error)
+
+        finally:
+            if connection:
+                cursor.close()
+                connection.close()
+                print("PostgreSQL connection is closed")
+                custom_log('Values From DB Not Checked')
         #######################################################
         if title not in database_data:
             custom_log('Add Series To Db')
