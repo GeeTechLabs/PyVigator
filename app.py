@@ -142,7 +142,7 @@ def write_to_db(json_data):
 #############################################
 
 def read_chapters(nav_type, chapter_number):
-    chapter_string = ''
+    chapter_object = []
     ##############################################################
     # Get The Article & Next Button Elements In The Chapter Page #
     ##############################################################  
@@ -219,14 +219,14 @@ def read_chapters(nav_type, chapter_number):
 
     custom_log("Images Saved To DB!")
 
-    chapter_str = '''{{
-            "num": {0},
-            "tags": '{1}',
-            "release": "{2}",
-            "images": {3}
-        }},'''.format(chapter_number, chapter_element, date_obj, images_list)
+    chapter_obj = {
+            "num": chapter_number,
+            "tags": chapter_element,
+            "release": date_obj,
+            "images":images_list
+        }
 
-    chapter_string = chapter_string + chapter_str
+    chapter_object.append(chapter_obj)
 
     custom_log('Going To While')
 
@@ -291,14 +291,14 @@ def read_chapters(nav_type, chapter_number):
 
         chapter_number = chapter_list[chapter_index]
         
-        chapter_str = '''{{
-                "num": {0},
-                "tags": '{1}',
-                "release": "{2}",
-                "images": {3}
-            }},'''.format(chapter_number, tags_chapter, date_obj, images_list)
+        chapter_obj = {
+                "num": chapter_number,
+                "tags": tags_chapter,
+                "release": date_obj,
+                "images": images_list
+            }
 
-        chapter_string = chapter_string + chapter_str
+        chapter_object.append(chapter_obj)
 
         custom_log(chapter_string)
 
@@ -320,34 +320,34 @@ def read_chapters(nav_type, chapter_number):
             series_artist = '-'
 
         try:
-            resulting_json = '''{{
-                "title": {0},
-                "description": """{1}""",
-                "released": "{2}",
-                "author": "{3}",
-                "serialization": "{4}",
-                "posted_by": "{5}",
-                "posted_on": "{6}",
-                "updated_on": "{7}",
-                "artist": "{8}",
-                "type": "{9}",
-                "ratings": {10},
-                "image_link": '{11}',
-                "followed_by": "{12}",
-                "genres": {13},
-                "status": "{14}",
-                "keywords": '{15}',
-                "first_chapter": '{16}',
-                "last_chapter": '{17}',
-                "chapters": [{18}],
-                "related_series": {19}, 
-                "is_popular_daily": {20},
-                "is_popular_weekly": {21},
-                "is_popular_monthly": {22},
-                "is_popular_all": {23},
-                "is_featured": {24},
-                "is_trending": {25}
-            }}'''.format(series_title, series_description, series_released, series_author, series_serialization, series_posted_by, series_posted_on, series_updated_on, series_artist, series_type, series_rating, series_cover_image, series_followed_by, series_genres, series_status, series_keywords, series_last_chapter, series_first_chapter, chapter_string, related_series, is_popular_daily, is_popular_weekly, is_popular_monthly, is_popular_all, is_featured, is_trending)
+            resulting_json = {
+                "title": series_title,
+                "description": series_description,
+                "released": series_released,
+                "author": series_author,
+                "serialization": series_serialization,
+                "posted_by": series_posted_by,
+                "posted_on": series_posted_on,
+                "updated_on": series_updated_on,
+                "artist": series_artist,
+                "type":series_type,
+                "ratings": series_rating,
+                "image_link": series_cover_image,
+                "followed_by": series_followed_by,
+                "genres": series_genres,
+                "status": series_status,
+                "keywords": series_keywords,
+                "first_chapter": series_last_chapter,
+                "last_chapter": series_first_chapter,
+                "chapters": chapter_object,
+                "related_series": related_series, 
+                "is_popular_daily": is_popular_daily,
+                "is_popular_weekly": is_popular_weekly,
+                "is_popular_monthly": is_popular_monthly,
+                "is_popular_all": is_popular_all,
+                "is_featured": is_featured,
+                "is_trending": is_trending
+            }
         except Exception as e:
             custom_log(e)
 
