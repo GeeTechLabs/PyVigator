@@ -352,22 +352,22 @@ def read_chapters(nav_type, chapter_number):
             custom_log(e)
 
 
-        try:
-            custom_log("Loading JSON String Into Loads")
-            json_obj = json.loads(resulting_json)
-        except Exception as e:
-            custom_log(e)
+        # try:
+        #     custom_log("Loading JSON String Into Loads")
+        #     resulting_json = json.loads(resulting_json)
+        # except Exception as e:
+        #     custom_log(e)
 
         try:
             custom_log('Attempting Write To File')
             with open("new_series.json", "w") as write_file:
-                json.dump(json_obj, write_file, indent=4)
+                json.dump(resulting_json, write_file, indent=4)
         except Exception as e:
             custom_log(e)
         custom_log(resulting_json)
 
         try:
-            write_to_db(json_obj)
+            write_to_db(resulting_json)
             custom_log('Data Save Successfully')
         except Exception as e:
             custom_log(e)
