@@ -185,7 +185,7 @@ def read_chapters(nav_type, chapter_number):
     except:
         custom_log('Tried Getting Messages. Now Saving Them')
 
-    
+
     ##############################################################
     # Get The Article & Next Button Elements In The Chapter Page #
     ##############################################################
@@ -221,7 +221,7 @@ def read_chapters(nav_type, chapter_number):
 
     chapter_str = '''{{
             "num": {0},
-            "tags": {1},
+            "tags": '{1}',
             "release": "{2}",
             "images": {3}
         }},'''.format(chapter_number, chapter_element, date_obj, images_list)
@@ -229,6 +229,9 @@ def read_chapters(nav_type, chapter_number):
     chapter_string = chapter_string + chapter_str
 
     custom_log('Going To While')
+
+
+    chapter_index = chapter_list.index(chapter_number)
     ##############################################################
     # Get The Article & Next Button Elements In The Chapter Page #
     ##############################################################
@@ -246,7 +249,7 @@ def read_chapters(nav_type, chapter_number):
         except:
             custom_log('Tried Clicking Next. Now Searchign For Reading Area.')
         
-
+        chapter_index -= 1 
         ##############################################################
         # Get The Article & Next Button Elements In The Chapter Page #
         ##############################################################
@@ -285,10 +288,12 @@ def read_chapters(nav_type, chapter_number):
             custom_log('Saving String')
 
         custom_log("Images Saved To DB!")
+
+        chapter_number = chapter_list[chapter_index]
         
         chapter_str = '''{{
                 "num": {0},
-                "tags": {1},
+                "tags": '{1}',
                 "release": "{2}",
                 "images": {3}
             }},'''.format(chapter_number, tags_chapter, date_obj, images_list)
@@ -325,15 +330,15 @@ def read_chapters(nav_type, chapter_number):
                 "posted_on": "{6}",
                 "updated_on": "{7}",
                 "artist": "{8}",
-                "type": "{9}",,
+                "type": "{9}",
                 "ratings": {10},
                 "image_link": '{11}',
                 "followed_by": "{12}",
                 "genres": {13},
                 "status": "{14}",
-                "keywords": {15},
-                "first_chapter": {16},
-                "last_chapter": {17},
+                "keywords": '{15}',
+                "first_chapter": '{16}',
+                "last_chapter": '{17}',
                 "chapters": [{18}],
                 "related_series": {19}, 
                 "is_popular_daily": {20},
@@ -394,13 +399,19 @@ def read_chapters(nav_type, chapter_number):
 #############################################
 
 def check_chapters(chapter_param):
-    global driver, series_title, series_description, series_released, series_author, series_serialization, series_posted_by, series_posted_on, series_updated_on, series_artist, series_type, series_rating, series_cover_image, series_followed_by, genres, series_status, series_keywords, series_last_chapter, series_first_chapter, related_series, is_popular, is_featured, is_trending, trending_series, features, popular_all, popular_monthly, popular_weekly, popular_daily, is_popular_daily, is_popular_weekly, is_popular_monthly, is_popular_all, chapter_string
+    global driver, series_title, series_description, series_released, series_author, series_serialization, series_posted_by, series_posted_on, series_updated_on, series_artist, series_type, series_rating, series_cover_image, series_followed_by, genres, series_status, series_keywords, series_last_chapter, series_first_chapter, related_series, is_popular, is_featured, is_trending, trending_series, features, popular_all, popular_monthly, popular_weekly, popular_daily, is_popular_daily, is_popular_weekly, is_popular_monthly, is_popular_all, chapter_string, chapter_list
     if chapter_param == 'New':
         try:
             chapter_container = driver.find_element(By.CLASS_NAME, 'clstyle')
             chapters_all = chapter_container.find_elements(By. TAG_NAME, 'li')
         except:
             custom_log('Trying To Look At First Chapter')
+
+        chapter_list = []
+
+        for chapter in chapters_all:
+            chapter_attr = chapter.get_attribute('data-num')
+            chapter_list.append(chapter_attr)
         try:
             custom_log("Looking For First Chapter To Visit!")
             first_chapter = chapters_all[-1]
@@ -423,6 +434,13 @@ def check_chapters(chapter_param):
             chapters_all = chapter_container.find_elements(By. TAG_NAME, 'li')
         except:
             custom_log('Trying To Look At First Chapter')
+
+        chapter_list = []
+
+        for chapter in chapters_all:
+            chapter_attr = chapter.get_attribute('data-num')
+            chapter_list.append(chapter_attr)
+
         for chapter in chapters_all:
             if chapter.text == chapter_param:
                 last_checked_chapter_element = chapter
@@ -722,25 +740,16 @@ def check_comics():
                 for series in all_related_series:
                     related_series += series.text 
                     related_series += ','
+                custom_log(related_series)
             except:
                 custom_log('Fetching Next Detail')
 
 
             ##############################################################
-            #  #
-            ##############################################################
-            # try:
-            #     genre_element = driver.find_element(By.CLASS_NAME, 'mgen')
-            #     genres_list = genre_element.find_elements(By.TAG_NAME, 'a')
-            #     for genre in genres_list:
-            #         genres.append(genre.text)
-            # except:
-            #     custom_log('Fetching Next Detail')
-
-
-            ##############################################################
             # Get Chapter Details ( First  &  Last Chapters) #
             ##############################################################
+
+            chapter_list = []
             try:
                 chapter_container = driver.find_element(By.CLASS_NAME, 'clstyle')
                 custom_log("Checking Last Chapter!")
@@ -779,15 +788,10 @@ def check_comics():
             except:
                 custom_log('Moving To Simulation')
 
-
             ##############################################################
             # Get Last Checked Chapter For Series From The DataBase #
             ##############################################################
-            custom_log("Attempting Simulation From DB!")
-            book = randint(1, 3)
-            book_str = 'book' + str(book)
 
-            ########### TODO ################
             # Add DB Value Of Chapter
             for row in database_data:
                 if row['title'] == series_title:
