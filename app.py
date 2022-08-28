@@ -50,10 +50,8 @@ def custom_log(msg):
 ###########################################
 
 def write_to_db(json_data):
-    import psycopg2
-
     try:
-        connection = psycopg2.connect(user="postgres", password='Gee321!!', host="127.0.0.1", port="5432", database="test2manhua")
+        connection = psycopg2.connect(user="postgres", password='tester', host="127.0.0.1", port="5432", database="test2manua")
         cursor = connection.cursor()
 
         sql_statement = '''
@@ -77,7 +75,7 @@ def write_to_db(json_data):
 
 
     try:
-        connection = psycopg2.connect(user="postgres", password='Gee321!!', host="127.0.0.1", port="5432", database="test2manhua")
+        connection = psycopg2.connect(user="postgres", password='tester', host="127.0.0.1", port="5432", database="test2manua")
         cursor = connection.cursor()
 
         for item in json_data:
@@ -507,7 +505,7 @@ def check_comics():
             custom_log('Trying To Open Series')
 
         try:
-            connection = psycopg2.connect(user="postgres", password='Gee321!!', host="127.0.0.1", port="5432", database="test2manhua")
+            connection = psycopg2.connect(user="postgres", password='tester', host="127.0.0.1", port="5432", database="test2manua")
             cursor = connection.cursor()
             select_statement = 'select title from comics;'
 
