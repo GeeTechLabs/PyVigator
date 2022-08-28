@@ -881,7 +881,7 @@ def main():
     popular_weekly = ''
     popular_monthly = ''
     popular_all = ''
-    overlay = driver.find_element_by_class_name('popup_overlay--2rgA3')
+    overlay = driver.find_element(By.CLASS_NAME, 'popup_overlay--2rgA3')
     driver.execute_script("""
     var element = arguments[0];
     element.parentNode.removeChild(element);
