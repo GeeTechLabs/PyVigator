@@ -643,7 +643,9 @@ def check_comics():
                     followed_by = re.findall(r'\b\d{1,3}(?:,\d{3})*(?!\d)', followed_by_string)
                     series_followed_by = int(followed_by[0].replace(',', ''))
                 except:
-                    followed_by = str(filter(str.isdigit, followed_by_string))
+                    regex_value = re.findall(r'\d+', followed_by_string)
+                    digits_list = list(map(int, regex_value))
+                    followed_by = digits_list[0]
                     series_followed_by = int(followed_by)
                 custom_log(series_followed_by)
             except Exception as e:
