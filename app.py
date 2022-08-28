@@ -886,31 +886,32 @@ def main():
         custom_log(len(popular_comics))
         tabs = driver.find_element(By.CLASS_NAME, 'ts-wpop-nav-tabs')
         nav = tabs.find_elements(By.TAG_NAME, 'a')
-        for element_indiv in popular_comics:
-            loop += 1
-            # if loop > 10 and loop < 20:
-            #     monthly = nav[1]
-            #     monthly.click()
-            #     custom_log(popular_comics = driver.find_elements(By.CLASS_NAME, 'leftseries'))
-            # elif loop > 20 and loop < 30:
-            #     all_time = nav[2]
-            #     all_time.click()
-            #     custom_log(popular_comics = driver.find_elements(By.CLASS_NAME, 'leftseries'))
-            # else:
-                
+        for elem in nav:
+            if elem.get_attribute('data-range') == 'weekly':
+                elem.click()
+                weekly = driver.find_element(By.CLASS_NAME, 'wpop-weekly')
+                popular_comics = weekly.find_elements(By.CLASS_NAME, 'leftseries')
+                for element_indiv in popular_comics:
+                    loop += 1    
+                    pop_series = element_indiv.find_element(By.CLASS_NAME, 'series').text
+                    popular_weekly += pop_series
+            elif elem.get_attribute('data-range') == 'monthly':
+                elem.click()
+                monthly = driver.find_element(By.CLASS_NAME, 'wpop-monthly')
+                popular_comics = monthly.find_elements(By.CLASS_NAME, 'leftseries')
+                for element_indiv in popular_comics:
+                    loop += 1    
+                    pop_series = element_indiv.find_element(By.CLASS_NAME, 'series').text
+                    popular_monthly += pop_series
+            elif elem.get_attribute('data-range') == 'alltime':
+                elem.click()
+                all_time = driver.find_element(By.CLASS_NAME, 'wpop-alltime')
+                popular_comics = all_time.find_elements(By.CLASS_NAME, 'leftseries')
+                for element_indiv in popular_comics:
+                    loop += 1    
+                    pop_series = element_indiv.find_element(By.CLASS_NAME, 'series').text
+                    popular_all += pop_series
 
-            pop_series = element_indiv.find_element(By.CLASS_NAME, 'series').text
-            if loop <= 10:
-                popular_weekly += pop_series
-                custom_log(pop_series)
-            elif loop >10 and loop <= 20:
-                custom_log(pop_series)
-                popular_monthly += pop_series
-            elif loop >20 and loop <= 30:
-                custom_log(pop_series)
-                popular_all += pop_series
-            else:
-                break
         custom_log(popular_daily)
         custom_log(popular_weekly)
         custom_log(popular_monthly)
