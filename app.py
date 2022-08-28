@@ -881,11 +881,11 @@ def main():
     popular_weekly = ''
     popular_monthly = ''
     popular_all = ''
-    overlay = driver.find_element(By.ID, 'popup_overlay--2rgA3')
-    driver.execute_script("""
-    var element = arguments[0];
-    element.parentNode.removeChild(element);
-    """, overlay)
+    # overlay = driver.find_element(By.ID, 'popup_overlay--2rgA3')
+    # driver.execute_script("""
+    # var element = arguments[0];
+    # element.parentNode.removeChild(element);
+    # """, overlay)
     try:
         popular_comics = driver.find_elements(By.CLASS_NAME, 'leftseries')
         custom_log(len(popular_comics))
