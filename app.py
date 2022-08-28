@@ -916,7 +916,8 @@ def main():
         custom_log(popular_weekly)
         custom_log(popular_monthly)
         custom_log(popular_all)
-    except:
+    except Exception as e:
+        custom_log(e)
         custom_log("Reviewing Current Page Comics!")
 
 
