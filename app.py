@@ -56,12 +56,12 @@ def write_to_db(json_data):
 
         sql_statement = '''
             INSERT INTO comics (title, description, released, author, serialization, posted_by, image_link, ratings, status, type, followed_by, posted_on, updated_on, keywords, first_chapter, last_chapter, related_series, is_popular_daily, is_popular_weekly, is_popular_monthly, is_popular_all, is_featured, is_trending)
-            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             ON CONFLICT (title) DO UPDATE SET
-            (title, description, released, author, serialization, posted_by, image_link, ratings, status, type, followed_by, posted_on, updated_on, keywords, first_chapter, last_chapter, related_series, is_popular_daily, is_popular_weekly, is_popular_monthly, is_popular_all, is_featured, is_trending) = (EXCLUDED.title, EXCLUDED.description, EXCLUDED.released, EXCLUDED.author, EXCLUDED.serialization, EXCLUDED.posted_by, EXCLUDED.image_link, EXCLUDED.ratings, EXCLUDED.status, EXCLUDED.type, EXCLUDED.followed_by, EXCLUDED.posted_on, EXCLUDED.updated_on, EXCLUDED.keywords, EXCLUDED.first_chapter, EXCLUDED.last_chapter, EXCLUDED.related_series, EXCLUDED.is_popular, EXCLUDED.is_featured, EXCLUDED.is_trending);
+            (title, description, released, author, serialization, posted_by, posted_on, updated_on, artist, type, ratings, image_link, followed_by, status, keywords, first_chapter, last_chapter, related_series, is_popular_daily, is_popular_weekly, is_popular_monthly, is_popular_all, is_featured, is_trending) = (EXCLUDED.title, EXCLUDED.description, EXCLUDED.released, EXCLUDED.author, EXCLUDED.serialization, EXCLUDED.posted_by, EXCLUDED.posted_on, EXCLUDED.updated_on, EXCLUDED.artist, EXCLUDED.type, EXCLUDED.ratings, EXCLUDED.image_link, EXCLUDED.followed_by, EXCLUDED.status, EXCLUDED.keywords, EXCLUDED.first_chapter, EXCLUDED.last_chapter, EXCLUDED.related_series, EXCLUDED.is_popular_daily, EXCLUDED.is_popular_weekly, EXCLUDED.is_popular_monthly, EXCLUDED.is_popular_all, EXCLUDED.is_featured, EXCLUDED.is_trending);
         '''
         for item in json_data:
-            cursor.execute(sql_statement, (item['title'], item['description'], item['released'], item['author'], item['serialization'], item['posted_by'], item['image_link'], item['ratings'], item['status'], item['type'], item['followed_by'], item['posted_on'], item['updated_on'], item['keywords'], item['first_chapter'], item['last_chapter'], str(item['related_series']), item['is_popular_daily'], item['is_popular_weekly'], item['is_popular_monthly'], item['is_popular_all'], item['is_featured'], item['is_trending']))
+            cursor.execute(sql_statement, (item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], item[8], item[9], item[10], item[11], item[12], item[13], item[14], item[15], item[16], item[17], item[18], item[19], item[20], item[21], item[22]))
             connection.commit()
 
     except (Exception, psycopg2.Error) as error:
@@ -104,7 +104,7 @@ def write_to_db(json_data):
                 VALUES (%s, %s, %s, %s, %s, %s)
                 ON CONFLICT (id) DO UPDATE SET
                 (id, num, release, images, tags, comic_id) = (EXCLUDED.id, EXCLUDED.num, EXCLUDED.release, EXCLUDED.images, EXCLUDED.tags, EXCLUDED.comic_id);"""
-                cursor.execute(chapters_statement, (row[0], chapter['num'], chapter['release'], images, chapter['tags'], comic_id))
+                cursor.execute(chapters_statement, (row[0], chapter[0], chapter[2], images, chapter[1], comic_id))
                 connection.commit()
             
             for genre in item['genres']:
@@ -331,9 +331,9 @@ def read_chapters(nav_type, chapter_number):
                 "updated_on": series_updated_on,
                 "artist": series_artist,
                 "type":series_type,
-                "ratings": series_rating,
+                "ratings": float(series_rating),
                 "image_link": series_cover_image,
-                "followed_by": series_followed_by,
+                "followed_by": int(series_followed_by),
                 "genres": series_genres,
                 "status": series_status,
                 "keywords": series_keywords,
