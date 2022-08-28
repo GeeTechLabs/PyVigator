@@ -883,12 +883,27 @@ def main():
     popular_all = ''
     try:
         popular_comics = driver.find_elements(By.CLASS_NAME, 'leftseries')
+        custom_log(len(popular_comics))
+        tabs = driver.find_element(By.CLASS_NAME, 'ts-wpop-nav-tabs')
+        nav = tabs.find_elements(By.TAG_NAME, 'a')
         for element_indiv in popular_comics:
-            pop_series = element_indiv.find_element(By.CLASS_NAME, 'series').text
             loop += 1
+            if loop > 10 and loop < 20:
+                monthly = nav[1]
+                monthly.click()
+                custom_log(popular_comics = driver.find_elements(By.CLASS_NAME, 'leftseries'))
+            elif loop > 20 and loop < 30:
+                all_time = nav[2]
+                all_time.click()
+                custom_log(popular_comics = driver.find_elements(By.CLASS_NAME, 'leftseries'))
+            else:
+                pass
+
+            pop_series = element_indiv.find_element(By.CLASS_NAME, 'series').text
             if loop <= 10:
                 popular_weekly += pop_series
             elif loop >10 and loop <= 20:
+                
                 popular_monthly += pop_series
             elif loop >20 and loop <= 30:
                 popular_all += pop_series
