@@ -55,7 +55,7 @@ def write_to_db(json_data):
         cursor = connection.cursor()
 
         sql_statement = '''
-            INSERT INTO comics (title, description, released, author, serialization, posted_by, image_link, ratings, status, type, followed_by, posted_on, updated_on, keywords, first_chapter, last_chapter, related_series, is_popular_daily, is_popular_weekly, is_popular_monthly, is_popular_all, is_featured, is_trending)
+            INSERT INTO comics (title, description, released, author, serialization, posted_by, posted_on, updated_on, artist, type, ratings, image_link, followed_by, status, keywords, first_chapter, last_chapter, related_series, is_popular_daily, is_popular_weekly, is_popular_monthly, is_popular_all, is_featured, is_trending)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
             ON CONFLICT (title) DO UPDATE SET
             (title, description, released, author, serialization, posted_by, posted_on, updated_on, artist, type, ratings, image_link, followed_by, status, keywords, first_chapter, last_chapter, related_series, is_popular_daily, is_popular_weekly, is_popular_monthly, is_popular_all, is_featured, is_trending) = (EXCLUDED.title, EXCLUDED.description, EXCLUDED.released, EXCLUDED.author, EXCLUDED.serialization, EXCLUDED.posted_by, EXCLUDED.posted_on, EXCLUDED.updated_on, EXCLUDED.artist, EXCLUDED.type, EXCLUDED.ratings, EXCLUDED.image_link, EXCLUDED.followed_by, EXCLUDED.status, EXCLUDED.keywords, EXCLUDED.first_chapter, EXCLUDED.last_chapter, EXCLUDED.related_series, EXCLUDED.is_popular_daily, EXCLUDED.is_popular_weekly, EXCLUDED.is_popular_monthly, EXCLUDED.is_popular_all, EXCLUDED.is_featured, EXCLUDED.is_trending);
