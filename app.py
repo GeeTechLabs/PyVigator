@@ -888,24 +888,26 @@ def main():
         nav = tabs.find_elements(By.TAG_NAME, 'a')
         for element_indiv in popular_comics:
             loop += 1
-            if loop > 10 and loop < 20:
-                monthly = nav[1]
-                monthly.click()
-                custom_log(popular_comics = driver.find_elements(By.CLASS_NAME, 'leftseries'))
-            elif loop > 20 and loop < 30:
-                all_time = nav[2]
-                all_time.click()
-                custom_log(popular_comics = driver.find_elements(By.CLASS_NAME, 'leftseries'))
-            else:
-                pass
+            # if loop > 10 and loop < 20:
+            #     monthly = nav[1]
+            #     monthly.click()
+            #     custom_log(popular_comics = driver.find_elements(By.CLASS_NAME, 'leftseries'))
+            # elif loop > 20 and loop < 30:
+            #     all_time = nav[2]
+            #     all_time.click()
+            #     custom_log(popular_comics = driver.find_elements(By.CLASS_NAME, 'leftseries'))
+            # else:
+                
 
             pop_series = element_indiv.find_element(By.CLASS_NAME, 'series').text
             if loop <= 10:
                 popular_weekly += pop_series
+                custom_log(pop_series)
             elif loop >10 and loop <= 20:
-                
+                custom_log(pop_series)
                 popular_monthly += pop_series
             elif loop >20 and loop <= 30:
+                custom_log(pop_series)
                 popular_all += pop_series
             else:
                 break
