@@ -881,16 +881,16 @@ def main():
     popular_weekly = ''
     popular_monthly = ''
     popular_all = ''
-    # overlay = driver.find_element(By.ID, 'popup_overlay--2rgA3')
-    # driver.execute_script("""
-    # var element = arguments[0];
-    # element.parentNode.removeChild(element);
-    # """, overlay)
     try:
         popular_comics = driver.find_elements(By.CLASS_NAME, 'leftseries')
         custom_log(len(popular_comics))
         tabs = driver.find_element(By.CLASS_NAME, 'ts-wpop-nav-tabs')
         nav = tabs.find_elements(By.TAG_NAME, 'a')
+        overlay = driver.find_element(By.CLASS_NAME, 'popup_overlay--2rgA3')
+        driver.execute_script("""
+        var element = arguments[0];
+        element.parentNode.removeChild(element);
+        """, overlay)
         for elem in nav:
             if elem.get_attribute('data-range') == 'weekly':
                 elem.click()
