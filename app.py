@@ -68,10 +68,12 @@ def write_to_db(json_data):
             print(item['title'])
         except Exception as e:
             custom_log(e)
-
+        
+        title, description, released, author, serialization, posted_by, posted_on, updated_on, artist, type, ratings, image_link, followed_by, status, keywords, first_chapter, last_chapter, related_series, is_popular_daily, is_popular_weekly, is_popular_monthly, is_popular_all, is_featured, is_trending = item['title'], item['description'], item['released'], item['author'], item['serialization'], item['posted_by'], item['posted_on'], item['updated_on'], item['artist'], item['type'], item['ratings'], item['image_link'], item['followed_by'], item['status'], item['keywords'], item['first_chapter'], item['last_chapter'], item['related_series'], item['is_popular_daily'], item['is_popular_weekly'], item['is_popular_monthly'], item['is_popular_all'], item['is_featured'], item['is_trending']
+        
         try:
             custom_log('Trying To Execute')
-            cursor.execute(sql_statement, (item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], item[8], item[9], item[10], item[11], item[12], item[14], item[15], item[16], item[17], item[19], item[20], item[21], item[22], item[23], item[24], item[25]))
+            cursor.execute(sql_statement, (title, description, released, author, serialization, posted_by, posted_on, updated_on, artist, type, ratings, image_link, followed_by, status, keywords, first_chapter, last_chapter, related_series, is_popular_daily, is_popular_weekly, is_popular_monthly, is_popular_all, is_featured, is_trending))
             custom_log('Trying To Commit')
             connection.commit()
         except psycopg2.Error as e:
@@ -92,7 +94,8 @@ def write_to_db(json_data):
         cursor = connection.cursor()
 
         item = json_data
-        select_statement = 'select id from comics where title = \'{0}\''.format(item[0])
+        title = item['title']
+        select_statement = 'select id from comics where title = \'{0}\''.format(title)
 
         cursor.execute(select_statement)
 
