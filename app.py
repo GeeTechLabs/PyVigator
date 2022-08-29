@@ -1,6 +1,6 @@
 from importlib.metadata import metadata
 import json
-from random import randint
+from random import randint, random
 from termios import CSTART
 from requests import TooManyRedirects, options
 from selenium import webdriver
@@ -735,12 +735,17 @@ def check_comics():
             related_series = ''
             try:
                 releases_elements = driver.find_elements(By.CLASS_NAME, 'releases')
+                custom_log(releases_elements)
                 related_series_element = releases_elements[-2]
+                custom_log(related_series_element)
                 all_related_series = related_series_element.find_elements(By.CLASS_NAME, 'tt')
+                custom_log(all_related_series)
                 for series in all_related_series:
                     related_series += series.text 
                     related_series += ','
                 custom_log(related_series)
+                if related_series == '':
+                    related_series = 'No Comics'
             except:
                 custom_log('Fetching Next Detail')
 
