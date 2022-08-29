@@ -383,7 +383,8 @@ def read_chapters(nav_type, chapter_number):
         custom_log(resulting_json)
 
         # Opening JSON file
-        json_file = open('new_series.json')
+        json_filename = series_title + '.json'
+        json_file = open(json_filename)
         
         # returns JSON object as 
         # a dictionary
@@ -535,20 +536,21 @@ def check_comics():
     list_url = driver.current_url
 
 
+    series_list = []
     ############################################################
     # Loop Though All Comics In The List And Get Their Details #
     ############################################################
     for series in all_series:
         global chapter_string
-        custom_log('Current Series Is ' + series.text)
-        title = series.text
-        chapter_string = ''
-        series_title = title
+        series_list.append(series.text)
 
         ############################################
         # Check If Series Title Exists In DataBase #
         ############################################
+    for link in series_list:
+        series = driver.find_element(By.LINK_TEXT, link)
 
+        series_title = link
         try:
             series_link = series.get_attribute('href')
             driver.get(series_link)
