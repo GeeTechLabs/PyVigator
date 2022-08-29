@@ -571,14 +571,18 @@ def check_comics():
             custom_log(e)
             custom_log('Trying To Open Series')
 
+        database_data = []
+
         try:
             connection = psycopg2.connect(user="postgres", password='tester', host="127.0.0.1", port="5432", database="test2manhua")
             cursor = connection.cursor()
-            select_statement = 'select title from comics;'
+            select_statement = 'select title, last_chapter from comics;'
 
             cursor.execute(select_statement)
 
-            database_data = cursor.fetchall()
+            database_rows = cursor.fetchall()
+            for data in database_rows:
+                database_data.append(data[0])
             custom_log(database_data)
 
         except (Exception, psycopg2.Error) as error:
@@ -836,12 +840,14 @@ def check_comics():
             ##############################################################
 
             # Add DB Value Of Chapter
-            for row in database_data:
-                if row['title'] == series_title:
+            for row in database_rows:
+                if row[0] == series_title:
                     current_data = row
+                    custom_log("Current To Is: ")
+                    custom_log(current_data)
                     break
 
-            db_value = current_data['last_checked_chapter']
+            db_value = current_data[1]
             try:
                 if str(db_value) != str(last_chapter):
                     custom_log('Not UpTo Date')
