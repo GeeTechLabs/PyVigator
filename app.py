@@ -54,6 +54,8 @@ def write_to_db(json_data):
         connection = psycopg2.connect(user="postgres", password='tester', host="127.0.0.1", port="5432", database="test2manua")
         cursor = connection.cursor()
 
+        custom_log('Trying Cursor Excecution')
+
         sql_statement = '''
             INSERT INTO comics (title, description, released, author, serialization, posted_by, posted_on, updated_on, artist, type, ratings, image_link, followed_by, status, keywords, first_chapter, last_chapter, related_series, is_popular_daily, is_popular_weekly, is_popular_monthly, is_popular_all, is_featured, is_trending)
             VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
@@ -61,8 +63,12 @@ def write_to_db(json_data):
             (title, description, released, author, serialization, posted_by, posted_on, updated_on, artist, type, ratings, image_link, followed_by, status, keywords, first_chapter, last_chapter, related_series, is_popular_daily, is_popular_weekly, is_popular_monthly, is_popular_all, is_featured, is_trending) = (EXCLUDED.title, EXCLUDED.description, EXCLUDED.released, EXCLUDED.author, EXCLUDED.serialization, EXCLUDED.posted_by, EXCLUDED.posted_on, EXCLUDED.updated_on, EXCLUDED.artist, EXCLUDED.type, EXCLUDED.ratings, EXCLUDED.image_link, EXCLUDED.followed_by, EXCLUDED.status, EXCLUDED.keywords, EXCLUDED.first_chapter, EXCLUDED.last_chapter, EXCLUDED.related_series, EXCLUDED.is_popular_daily, EXCLUDED.is_popular_weekly, EXCLUDED.is_popular_monthly, EXCLUDED.is_popular_all, EXCLUDED.is_featured, EXCLUDED.is_trending);
         '''
         item = json_data
-        cursor.execute(sql_statement, (item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], item[8], item[9], item[10], item[11], item[12], item[13], item[14], item[15], item[16], item[17], item[18], item[19], item[20], item[21], item[22], item[23]))
-        connection.commit()
+        custom_log("Trying Statement Execution")
+        try:
+            cursor.execute(sql_statement, (item[0], item[1], item[2], item[3], item[4], item[5], item[6], item[7], item[8], item[9], item[10], item[11], item[12], item[13], item[14], item[15], item[16], item[17], item[18], item[19], item[20], item[21], item[22], item[23]))
+            connection.commit()
+        except Exception as e:
+            custom_log(e)
 
     except (Exception, psycopg2.Error) as error:
         print('Failed With Error ', error)
@@ -86,15 +92,15 @@ def write_to_db(json_data):
             row = cursor.fetchone()
             print(row)
             comic_id = row[0]
-            for chapter in item['chapters']:
+            for chapter in item[18]:
                 print('Comic Id: ', comic_id)
                 images = ''
-                for image in chapter['images']:
+                for image in chapter[3]:
                     images += image
                     images += ', '
                 
 
-                select_statement = 'select id from chapters where num = \'{0}\' and comic_id = \'{1}\''.format(chapter["num"], comic_id)
+                select_statement = 'select id from chapters where num = \'{0}\' and comic_id = \'{1}\''.format(chapter[0], comic_id)
 
                 cursor.execute(select_statement)
 
@@ -734,11 +740,11 @@ def check_comics():
             ##############################################################
             related_series = ''
             try:
-                releases_elements = driver.find_elements(By.CLASS_NAME, 'releases')
+                releases_elements = driver.find_element(By.CLASS_NAME, 'listupd')
                 custom_log(releases_elements)
-                related_series_element = releases_elements[-2]
-                custom_log(related_series_element)
-                all_related_series = related_series_element.find_elements(By.CLASS_NAME, 'tt')
+                # related_series_element = releases_elements[-2]
+                # custom_log(related_series_element)
+                all_related_series = releases_elements.find_elements(By.CLASS_NAME, 'tt')
                 custom_log(all_related_series)
                 for series in all_related_series:
                     related_series += series.text 
