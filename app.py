@@ -316,7 +316,7 @@ def read_chapters(nav_type, chapter_number):
 
         chapter_object.append(chapter_obj)
 
-        custom_log(chapter_string)
+        custom_log(chapter_object)
 
         ##############################################################
         # Get The Article & Next Button Elements In The Chapter Page #
