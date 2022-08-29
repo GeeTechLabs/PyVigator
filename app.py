@@ -551,6 +551,7 @@ def check_comics():
         series = driver.find_element(By.LINK_TEXT, link)
 
         series_title = link
+        title = link
         try:
             series_link = series.get_attribute('href')
             driver.get(series_link)
