@@ -65,7 +65,7 @@ def write_to_db(json_data):
         item = json_data
         custom_log("Trying Statement Execution")
         try:
-            print(item)
+            print(item[0])
         except Exception as e:
             custom_log(e)
 
