@@ -69,7 +69,7 @@ def write_to_db(json_data):
         except Exception as e:
             custom_log(e)
         
-        title, description, released, author, serialization, posted_by, posted_on, updated_on, artist, type, ratings, image_link, followed_by, status, keywords, first_chapter, last_chapter, related_series, is_popular_daily, is_popular_weekly, is_popular_monthly, is_popular_all, is_featured, is_trending = item['title'], item['description'], item['released'], item['author'], item['serialization'], item['posted_by'], item['posted_on'], item['updated_on'], item['artist'], item['type'], item['ratings'], item['image_link'], item['followed_by'], item['status'], item['keywords'], item['first_chapter'], item['last_chapter'], item['related_series'], item['is_popular_daily'], item['is_popular_weekly'], item['is_popular_monthly'], item['is_popular_all'], item['is_featured'], item['is_trending']
+            title, description, released, author, serialization, posted_by, posted_on, updated_on, artist, type, ratings, image_link, followed_by, status, keywords, first_chapter, last_chapter, related_series, is_popular_daily, is_popular_weekly, is_popular_monthly, is_popular_all, is_featured, is_trending = item['title'], item['description'], item['released'], item['author'], item['serialization'], item['posted_by'], item['posted_on'], item['updated_on'], item['artist'], item['type'], item['ratings'], item['image_link'], item['followed_by'], item['status'], item['keywords'], item['first_chapter'], item['last_chapter'], item['related_series'], item['is_popular_daily'], item['is_popular_weekly'], item['is_popular_monthly'], item['is_popular_all'], item['is_featured'], item['is_trending']
         
         try:
             custom_log('Trying To Execute')
@@ -363,8 +363,8 @@ def read_chapters(nav_type, chapter_number):
                 "genres": series_genres,
                 "status": series_status,
                 "keywords": series_keywords,
-                "first_chapter": series_last_chapter,
-                "last_chapter": series_first_chapter,
+                "first_chapter":series_first_chapter,
+                "last_chapter":  series_last_chapter,
                 "chapters": chapter_object,
                 "related_series": related_series, 
                 "is_popular_daily": is_popular_daily,
@@ -474,12 +474,9 @@ def check_chapters(chapter_param):
 
         for chapter in chapters_all:
             chapter_attr = chapter.get_attribute('data-num')
-            chapter_list.append(chapter_attr)
-
-        for chapter in chapters_all:
-            if chapter.text == chapter_param:
+            if chapter_attr == str(chapter_param):
                 last_checked_chapter_element = chapter
-                break
+            chapter_list.append(chapter_attr)
         
         try:
             last_checked_chapter_num = str(last_checked_chapter_element.get_attribute('data-num'))
