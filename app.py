@@ -51,7 +51,7 @@ def custom_log(msg):
 
 def write_to_db(json_data):
     try:
-        connection = psycopg2.connect(user="postgres", password='tester', host="127.0.0.1", port="5432", database="test2manua")
+        connection = psycopg2.connect(user="postgres", password='tester', host="127.0.0.1", port="5432", database="test2manhua")
         cursor = connection.cursor()
 
         custom_log('Trying Cursor Excecution')
@@ -90,7 +90,7 @@ def write_to_db(json_data):
 
 
     try:
-        connection = psycopg2.connect(user="postgres", password='tester', host="127.0.0.1", port="5432", database="test2manua")
+        connection = psycopg2.connect(user="postgres", password='tester', host="127.0.0.1", port="5432", database="test2manhua")
         cursor = connection.cursor()
 
         item = json_data
@@ -572,7 +572,7 @@ def check_comics():
             custom_log('Trying To Open Series')
 
         try:
-            connection = psycopg2.connect(user="postgres", password='tester', host="127.0.0.1", port="5432", database="test2manua")
+            connection = psycopg2.connect(user="postgres", password='tester', host="127.0.0.1", port="5432", database="test2manhua")
             cursor = connection.cursor()
             select_statement = 'select title from comics;'
 
@@ -582,13 +582,13 @@ def check_comics():
 
         except (Exception, psycopg2.Error) as error:
             custom_log(error)
+            custom_log('Values From DB Not Checked')
 
         finally:
             if connection:
                 cursor.close()
                 connection.close()
                 print("PostgreSQL connection is closed")
-                custom_log('Values From DB Not Checked')
         #######################################################
         if title not in database_data:
             custom_log('Add Series To Db')
