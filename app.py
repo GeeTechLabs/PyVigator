@@ -334,6 +334,15 @@ def read_chapters(nav_type, chapter_number):
                 series_artist = '-'
         except:
             series_artist = '-'
+        
+        if series_released == '-':
+            series_released = None
+
+        if series_posted_on == '-':
+            series_posted_on = None
+            
+        if series_updated_on == '-':
+            series_updated_on = None
 
         try:
             resulting_json = {
