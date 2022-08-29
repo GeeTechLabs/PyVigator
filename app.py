@@ -374,16 +374,17 @@ def read_chapters(nav_type, chapter_number):
         # except Exception as e:
         #     custom_log(e)
 
+        
+        json_filename = series_title.replace(' ', '-') + '.json'
         try:
             custom_log('Attempting Write To File')
-            with open("new_series.json", "w") as write_file:
+            with open(json_filename, "w") as write_file:
                 json.dump(resulting_json, write_file, indent=4)
         except Exception as e:
             custom_log(e)
         custom_log(resulting_json)
 
         # Opening JSON file
-        json_filename = series_title + '.json'
         json_file = open(json_filename)
         
         # returns JSON object as 
