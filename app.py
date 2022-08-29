@@ -91,49 +91,49 @@ def write_to_db(json_data):
         connection = psycopg2.connect(user="postgres", password='tester', host="127.0.0.1", port="5432", database="test2manua")
         cursor = connection.cursor()
 
-        for item in json_data:
-            select_statement = 'select id from comics where title = \'{0}\''.format(item[0])
+        item = json_data
+        select_statement = 'select id from comics where title = \'{0}\''.format(item[0])
+
+        cursor.execute(select_statement)
+
+        row = cursor.fetchone()
+        print(row)
+        comic_id = row[0]
+        for chapter in item[18]:
+            print('Comic Id: ', comic_id)
+            images = ''
+            for image in chapter[3]:
+                images += image
+                images += ', '
+            
+
+            select_statement = 'select id from chapters where num = \'{0}\' and comic_id = \'{1}\''.format(chapter[0], comic_id)
 
             cursor.execute(select_statement)
 
             row = cursor.fetchone()
-            print(row)
-            comic_id = row[0]
-            for chapter in item[18]:
-                print('Comic Id: ', comic_id)
-                images = ''
-                for image in chapter[3]:
-                    images += image
-                    images += ', '
-                
+            chapters_statement = """
+            INSERT INTO chapters (id, num, release, images, tags, comic_id)
+            VALUES (%s, %s, %s, %s, %s, %s)
+            ON CONFLICT (id) DO UPDATE SET
+            (id, num, release, images, tags, comic_id) = (EXCLUDED.id, EXCLUDED.num, EXCLUDED.release, EXCLUDED.images, EXCLUDED.tags, EXCLUDED.comic_id);"""
+            cursor.execute(chapters_statement, (row[0], chapter[0], chapter[2], images, chapter[1], comic_id))
+            connection.commit()
+        
+        for genre in item['genres']:
 
-                select_statement = 'select id from chapters where num = \'{0}\' and comic_id = \'{1}\''.format(chapter[0], comic_id)
+            select_statement = 'select id from genres where name = \'{0}\' and comic_id = \'{1}\''.format(genre, comic_id)
 
-                cursor.execute(select_statement)
+            cursor.execute(select_statement)
 
-                row = cursor.fetchone()
-                chapters_statement = """
-                INSERT INTO chapters (id, num, release, images, tags, comic_id)
-                VALUES (%s, %s, %s, %s, %s, %s)
-                ON CONFLICT (id) DO UPDATE SET
-                (id, num, release, images, tags, comic_id) = (EXCLUDED.id, EXCLUDED.num, EXCLUDED.release, EXCLUDED.images, EXCLUDED.tags, EXCLUDED.comic_id);"""
-                cursor.execute(chapters_statement, (row[0], chapter[0], chapter[2], images, chapter[1], comic_id))
-                connection.commit()
-            
-            for genre in item['genres']:
-
-                select_statement = 'select id from genres where name = \'{0}\' and comic_id = \'{1}\''.format(genre, comic_id)
-
-                cursor.execute(select_statement)
-
-                row = cursor.fetchone()
-                genre_statement = """
-                INSERT INTO genres (id, name, comic_id)
-                VALUES (%s, %s, %s)
-                ON CONFLICT (id) DO UPDATE SET
-                (id, name, comic_id) = (EXCLUDED.id, EXCLUDED.name, EXCLUDED.comic_id);"""
-                cursor.execute(genre_statement, (row[0], genre, comic_id))
-                connection.commit()
+            row = cursor.fetchone()
+            genre_statement = """
+            INSERT INTO genres (id, name, comic_id)
+            VALUES (%s, %s, %s)
+            ON CONFLICT (id) DO UPDATE SET
+            (id, name, comic_id) = (EXCLUDED.id, EXCLUDED.name, EXCLUDED.comic_id);"""
+            cursor.execute(genre_statement, (row[0], genre, comic_id))
+            connection.commit()
             
 
 
@@ -379,8 +379,15 @@ def read_chapters(nav_type, chapter_number):
             custom_log(e)
         custom_log(resulting_json)
 
+        # Opening JSON file
+        json_file = open('new_series.json')
+        
+        # returns JSON object as 
+        # a dictionary
+        data = json.load(json_file)
+
         try:
-            write_to_db(resulting_json)
+            write_to_db(data)
             custom_log('Data Save Successfully')
         except Exception as e:
             custom_log(e)
