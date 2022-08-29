@@ -579,6 +579,7 @@ def check_comics():
             cursor.execute(select_statement)
 
             database_data = cursor.fetchall()
+            custom_log(database_data)
 
         except (Exception, psycopg2.Error) as error:
             custom_log(error)
