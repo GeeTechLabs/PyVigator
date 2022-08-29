@@ -158,6 +158,7 @@ def write_to_db(json_data):
 #############################################
 
 def read_chapters(nav_type, chapter_number):
+    global series_title, series_description, series_released, series_author, series_serialization, series_posted_by, series_posted_on, series_updated_on, series_artist, series_type, series_rating, series_cover_image, series_followed_by, genres, series_status, series_keywords, series_last_chapter, series_first_chapter, related_series, is_popular, is_featured, is_trending, trending_series, features, popular_all, popular_monthly, popular_weekly, popular_daily, is_popular_daily, is_popular_weekly, is_popular_monthly, is_popular_all, chapter_string, chapter_list
     chapter_object = []
     ##############################################################
     # Get The Article & Next Button Elements In The Chapter Page #
@@ -340,7 +341,7 @@ def read_chapters(nav_type, chapter_number):
 
         if series_posted_on == '-':
             series_posted_on = None
-            
+
         if series_updated_on == '-':
             series_updated_on = None
 
